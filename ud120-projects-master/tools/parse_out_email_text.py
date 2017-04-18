@@ -37,7 +37,6 @@ def parseOutText(f):
         words =""
         from nltk.stem.snowball import SnowballStemmer
         split_text = str.split(text_string)
-        print(split_text)
 
         stemmer = SnowballStemmer("english")
         for i in split_text:

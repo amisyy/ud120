@@ -44,18 +44,24 @@ for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
         ### once everything is working, remove this line to run over full dataset
         temp_counter += 1
         remove = ["sara", "shackleton", "chris", "germani"]
-        if temp_counter < 500:
-            path = os.path.join('..', path[:-1])
-            if not os.path.exists(path):
-                temp_counter-=1
-                continue
 
-            print(path)
-            email = open(path, "r")
-            data = parseOutText(email)
-            for replace_text in remove:
-                data = data.replace(replace_text,"")
-            word_data.append(data)
+        path = os.path.join('..', path[:-1])
+        if not os.path.exists(path):
+            word_data.append("0")
+            continue
+
+            #print(path)
+        email = open(path, "r")
+        data = parseOutText(email)
+
+        for replace_text in remove:
+            data = data.replace(replace_text,"")
+
+        word_data.append(data)
+        if name=="sara":
+            from_data.append(0)
+        if name=="chris":
+            from_data.append(1)
             ### use parseOutText to extract the text from the opened email
 
             ### use str.replace() to remove any instances of the words
@@ -66,16 +72,20 @@ for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
             ### append a 0 to from_data if email is from Sara, and 1 if email is from Chris
 
 
-            email.close()
+        email.close()
+from sklearn.feature_extraction.text import TfidfVectorizer
+vectorizer = TfidfVectorizer(min_df=1)
+vector= vectorizer.fit_transform(word_data)
+print(len(vectorizer.get_feature_names()))
 
 print("emails processed")
+
 from_sara.close()
 from_chris.close()
 
 #pickle.dump( word_data, open("your_word_data.pkl", "wb") )
 #pickle.dump( from_data, open("your_email_authors.pkl", "wb") )
-print("ok")
-print(word_data[152])
+
 
 
 
